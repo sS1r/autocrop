@@ -3,7 +3,9 @@
 #include <boost/program_options.hpp>
 
 #include <sstream>
+#include <string>
 #include <iostream>
+#include <algorithm>
 
 namespace po = boost::program_options;        
 
@@ -29,6 +31,7 @@ programOptions parse_options(int argc, char *argv[])
 	visible_add("help,h", "Print this help and exit");
 	visible_add("verbose,v", "Print verbose output");
 	visible_add("threshold,t", po::value<double>(), "Cropping threshold [0 ... 100].");
+	visible_add("color,c", po::value<std::string>(), "Base color, in format R,G,B.");
 	hidden_add("input-files", po::value<std::vector<std::string>>(), "Input file");
 	p.add("input-files", -1);
 	all.add(visible).add(hidden);
@@ -47,9 +50,50 @@ programOptions parse_options(int argc, char *argv[])
 		if(th < 0 || th > 100)
 		{
 			th = th < 0 ? 0 : 100;
-			std::cerr << "Warning: threshold out of limits; set to " << th << "." << std::endl;
+			std::cerr << "Warning: threshold out of bounds; set to " << th << "." << std::endl;
 		}
-		po.threshold = th;
+		po.crop.threshold = th;
+	}
+	if(vm.count("color"))
+	{
+		std::string color = vm["color"].as<std::string>();
+		
+		// Make sure there are exactly 2 commas in the string
+		if(std::count(color.begin(), color.end(), ',') != 2)
+		{
+			throw "'color' option in wrong format!";
+		}
+		else
+		{
+			// Parse the color string
+			int i1 = color.find(',');
+			int i2 = color.find(',', i1 + 1);
+			std::string r_str = color.substr(0, i1);
+			std::string g_str = color.substr(i1 + 1, i2 - i1);
+			std::string b_str = color.substr(i2 + 1);
+			
+			// Convert to int
+			int r, g, b;
+			try 
+			{
+				r = std::stoi(r_str);
+				g = std::stoi(g_str);
+				b = std::stoi(b_str);
+			}
+			catch(...)
+			{
+				throw "Could not convert color value to integer";
+			}
+			
+			// Check bounds
+			if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+			{
+				throw "Color out of bounds [0 ... 255]";
+			}
+			po.crop.color_r = r;
+			po.crop.color_g = g;
+			po.crop.color_b = b;
+		}
 	}
 	if(vm.count("input-files")) po.input_files = vm["input-files"].as<std::vector<std::string>>();
 

@@ -26,7 +26,7 @@ int run(const programOptions& opts)
 			{
 				std::cout << "Processing file " << *i << std::endl;
 			}
-			autocrop((*i).c_str(), "cropped.png");
+			autocrop((*i).c_str(), "cropped.png", opts.crop);
 		}
 	}
 	
