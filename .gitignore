@@ -1,5 +1,3 @@
 obj/
 autocrop
-test.png
-cropped.png
-src/example
+*.png
