@@ -1,7 +1,10 @@
 #include <boost/gil/gil_all.hpp>
 #include <boost/gil/extension/io/png_io.hpp>
+#include <boost/gil/extension/io/jpeg_io.hpp>
+#include <boost/gil/extension/io/tiff_io.hpp>
 
 #include <cmath>
+#include <algorithm>
 
 #include "autocrop.h"
 
@@ -117,14 +120,54 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 }
 
 /*
+	Reads the input file into a GIL image
+	The file type is deduced from the file extension
+*/
+void _read_image(std::string input_fname, gil::rgb8_image_t& img)
+{
+	// Find the file extension
+	unsigned ext_loc = input_fname.find('.');
+	if (ext_loc == std::string::npos)
+	{
+		throw "Input file type not recognized";
+	}
+	std::string ext = input_fname.substr(ext_loc + 1);
+	
+	// Transform to lower case
+	auto tolower = [](unsigned char c) -> unsigned char {return std::tolower(c);};
+	std::transform(ext.begin(), ext.end(), ext.begin(), tolower);
+	
+	// Read the image
+	if(ext == "png")
+	{
+		gil::png_read_and_convert_image(input_fname.c_str(), img);
+	}
+	else if(ext == "jpg" || ext == "jpeg")
+	{	
+		gil::jpeg_read_and_convert_image(input_fname.c_str(), img);
+	}
+	else if(ext == "tif" || ext == "tiff")
+	{
+		gil::tiff_read_and_convert_image(input_fname.c_str(), img);
+	}
+	else
+	{
+		throw "Input file type not supported";
+	}	
+}
+
+
+/*
 	Crops the given input file and saves the result in the output file
 */
 void autocrop(const char* input_fname, const char* output_fname, const cropOptions& options)
 {
+	// Read the input file into a 'view'
 	gil::rgb8_image_t img;
-	gil::png_read_and_convert_image(input_fname, img);
+	_read_image(input_fname, img);
 	gil::rgb8_view_t view = gil::view(img);
 
+	// Calculate the amount of crop on all directions
 	unsigned crop_top = _crop(view, up, options);
 	std::cout << "Would remove " << crop_top << " rows from top." << std::endl;
 	

@@ -4,6 +4,12 @@
 #include "parse_options.h"
 
 /*
+	Global flag for verbose output
+*/
+extern bool gVerboseOutput;
+
+
+/*
 	Runs the main program.
 	
 	Return value:
@@ -15,7 +21,11 @@
 	will be terminated in non-controlled fashion.
 	
 */
-
 int run(const programOptions& opts);
+
+/*
+	Generates a output filename from the given input filename
+*/
+std::string generate_output_filename(std::string input_fname);
 
 #endif /* RUN_H */

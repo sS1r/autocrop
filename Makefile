@@ -1,5 +1,5 @@
 CC=g++
-LFLAGS=-lboost_program_options -lpng
+LFLAGS=-lboost_program_options -lpng -ljpeg -ltiff
 
 ODIR=obj
 SDIR=src

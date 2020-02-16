@@ -4,6 +4,9 @@
 #include "parse_options.h"
 #include "autocrop.h"
 
+// Global flag for verbose output
+bool gVerboseOutput;
+
 int run(const programOptions& opts)
 {
 	
@@ -12,6 +15,8 @@ int run(const programOptions& opts)
 		std::cout << opts.helpmsg << std::endl;
 		return 0;
 	}
+	
+	gVerboseOutput = opts.verbose;
 	
 	if(opts.input_files.empty())
 	{
