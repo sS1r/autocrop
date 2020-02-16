@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "autocrop.h"
+#include "run.h"
 
 // Using Boost GIL for handling images
 namespace gil = boost::gil;
@@ -169,20 +170,45 @@ void autocrop(const char* input_fname, const char* output_fname, const cropOptio
 
 	// Calculate the amount of crop on all directions
 	unsigned crop_top = _crop(view, up, options);
-	std::cout << "Would remove " << crop_top << " rows from top." << std::endl;
+	if(gVerboseOutput)
+	{
+		std::cout << "Removing " << crop_top << " rows from top." << std::endl;
+	}
 	
 	unsigned crop_bottom = _crop(view, down, options);
-	std::cout << "Would remove " << crop_bottom << " rows from bottom." << std::endl;
-
+	if(gVerboseOutput)
+	{
+		std::cout << "Removing " << crop_bottom << " rows from bottom." << std::endl;
+	}
+	
 	unsigned crop_left = _crop(view, left, options);
-	std::cout << "Would remove " << crop_left << " rows from left." << std::endl;
+	if(gVerboseOutput)
+	{
+		std::cout << "Removing " << crop_left << " rows from left." << std::endl;
+	}
 	
 	unsigned crop_right = _crop(view, right, options);
-	std::cout << "Would remove " << crop_right << " rows from right." << std::endl;
-
-	// Crop the original image and write to file
+	if(gVerboseOutput)
+	{
+		std::cout << "Removing " << crop_right << " rows from right." << std::endl;
+	}
+	
+	// Crop the original image
 	unsigned new_w = view.width() - crop_left - crop_right;
 	unsigned new_h = view.height() - crop_top - crop_bottom;
-	gil::rgb8_view_t new_view = gil::subimage_view(view, crop_left, crop_top, new_w, new_h);
-	gil::png_write_view(output_fname, new_view);
+	gil::rgb8_view_t cropped_view = gil::subimage_view(view, crop_left, crop_top, new_w, new_h);	
+	
+	// Generate output image
+	gil::rgb8_image_t output_img(new_w + 2 * options.border_x, new_h + 2 * options.border_y);
+	
+	// Fill the output image with the cropping base color
+	gil::rgb8_pixel_t fill_color(options.color_r, options.color_g, options.color_b);
+	gil::fill_pixels(gil::view(output_img), fill_color);
+
+	// Copy the cropped section of the original image into the output image
+	gil::rgb8_view_t output_view = gil::subimage_view(gil::view(output_img), options.border_x, options.border_y, new_w, new_h);
+	gil::copy_pixels(cropped_view, output_view);
+	
+	// Write output
+	gil::png_write_view(output_fname, gil::const_view(output_img));
 }

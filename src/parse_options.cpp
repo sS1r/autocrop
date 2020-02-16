@@ -30,6 +30,8 @@ programOptions parse_options(int argc, char *argv[])
 	// Add all options here
 	visible_add("help,h", "Print this help and exit");
 	visible_add("verbose,v", "Print verbose output");
+	visible_add("border_x", po::value<unsigned>(), "Leave border in X direction");
+	visible_add("border_y", po::value<unsigned>(), "Leave border in Y direction");
 	visible_add("threshold,t", po::value<double>(), "Cropping threshold [0 ... 100].");
 	visible_add("color,c", po::value<std::string>(), "Base color, in format R,G,B.");
 	hidden_add("input-files", po::value<std::vector<std::string>>(), "Input file");
@@ -44,6 +46,14 @@ programOptions parse_options(int argc, char *argv[])
 	// Get the option values
 	po.help = bool(vm.count("help"));
 	po.verbose = bool(vm.count("verbose"));
+	if(vm.count("border_x"))
+	{
+		po.crop.border_x = vm["border_x"].as<unsigned>();
+	}
+	if(vm.count("border_y"))
+	{
+		po.crop.border_y = vm["border_y"].as<unsigned>();
+	}
 	if(vm.count("threshold"))
 	{
 		double th = vm["threshold"].as<double>();

@@ -1,3 +1,8 @@
 obj/
 autocrop
 /*.png
+/*.bmp
+/*.jpg
+/*.jpeg
+/*.tiff
+/*.tif
