@@ -1,8 +1,13 @@
 obj/
+obj-win/
+include/
+lib/
 autocrop
+autocrop.exe
 /*.png
 /*.bmp
 /*.jpg
 /*.jpeg
 /*.tiff
 /*.tif
+/*.dll

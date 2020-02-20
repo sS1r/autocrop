@@ -1,7 +1,11 @@
 CC=g++
 CFLAGS=-c -g -std=c++11 -Wall
-
 ODIR=../obj
+
+ifeq ($(OS),Windows_NT)
+	ODIR=../obj-win
+	CFLAGS += -I..\include
+endif
 
 all:
 
