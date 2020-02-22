@@ -31,9 +31,24 @@ int run(const programOptions& opts)
 			{
 				std::cout << "Processing file " << *i << std::endl;
 			}
-			autocrop((*i).c_str(), "cropped.png", opts.crop);
+			autocrop((*i).c_str(), generate_output_filename(*i).c_str(), opts.crop);
 		}
 	}
 	
 	return 1;
+}
+
+	
+std::string generate_output_filename(std::string input_fname)
+{
+	// Split the filename at extension
+	unsigned ext_loc = input_fname.find('.');
+	if (ext_loc == std::string::npos)
+	{
+		throw "Input file type not recognized";
+	}
+	std::string ext = input_fname.substr(ext_loc + 1);
+	std::string base = input_fname.substr(0, ext_loc);
+	
+	return base + "_cropped." + ext;
 }
