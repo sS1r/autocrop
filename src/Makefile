@@ -4,7 +4,7 @@ ODIR=../obj
 
 ifeq ($(OS),Windows_NT)
 	ODIR=../obj-win
-	CFLAGS += -I..\include
+	CFLAGS += -I..\.github\include
 endif
 
 all:
