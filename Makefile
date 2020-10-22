@@ -12,7 +12,7 @@ ifeq ($(OS), Windows_NT)
 	ODIR=obj-win
 	EXECUTABLE=autocrop.exe
 	MAKEDIR=mkdir $(ODIR) 2> nul
-	LFLAGS += -L.github/lib
+	LFLAGS += -m32 -L.github/lib
 endif
 
 
