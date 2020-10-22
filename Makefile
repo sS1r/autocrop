@@ -9,6 +9,7 @@ MAKEDIR=mkdir -p $(ODIR)
 
 # Modify some variables if on windows
 ifeq ($(OS), Windows_NT)
+	CC=mingw32-g++
 	ODIR=obj-win
 	EXECUTABLE=autocrop.exe
 	MAKEDIR=mkdir $(ODIR) 2> nul

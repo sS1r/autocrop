@@ -3,6 +3,7 @@ CFLAGS=-c -g -std=c++11 -Wall -m32
 ODIR=../obj
 
 ifeq ($(OS),Windows_NT)
+	CC=mingw32-g++
 	ODIR=../obj-win
 	CFLAGS += -I..\.github\include
 endif
