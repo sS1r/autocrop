@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -g -std=c++11 -Wall
+CFLAGS=-c -g -std=c++11 -Wall -m32
 ODIR=../obj
 
 ifeq ($(OS),Windows_NT)
