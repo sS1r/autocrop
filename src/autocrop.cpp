@@ -127,7 +127,7 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 void _read_image(std::string input_fname, gil::rgb8_image_t& img)
 {
 	// Find the file extension
-	unsigned ext_loc = input_fname.find('.');
+	unsigned ext_loc = input_fname.rfind('.');
 	if (ext_loc == std::string::npos)
 	{
 		throw "Input file type not recognized";

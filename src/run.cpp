@@ -42,7 +42,7 @@ int run(const programOptions& opts)
 std::string generate_output_filename(std::string input_fname)
 {
 	// Split the filename at extension
-	unsigned ext_loc = input_fname.find('.');
+	unsigned ext_loc = input_fname.rfind('.');
 	if (ext_loc == std::string::npos)
 	{
 		throw "Input file type not recognized";
