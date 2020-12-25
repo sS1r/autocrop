@@ -1,3 +1,7 @@
+// To fix compiling in some platforms
+#define png_infopp_NULL (png_infopp)NULL
+#define int_p_NULL (int*)NULL
+
 #include <boost/gil/gil_all.hpp>
 #include <boost/gil/extension/io/png_io.hpp>
 #include <boost/gil/extension/io/jpeg_io.hpp>
@@ -5,9 +9,11 @@
 
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 #include "autocrop.h"
 #include "run.h"
+
 
 // Using Boost GIL for handling images
 namespace gil = boost::gil;
