@@ -18,10 +18,13 @@ int run(const programOptions& opts)
 	
 	gVerboseOutput = opts.verbose;
 	
-	if(opts.input_files.empty())
+	if(opts.read_stdin)
 	{
-		std::cerr << "No input files given! Exiting now." << std::endl;
-		return -1;
+		std::string fname;
+		while(std::getline(std::cin, fname))
+		{
+			autocrop(fname.c_str(), generate_output_filename(fname).c_str(), opts.crop);
+		}
 	}
 	else
 	{
@@ -45,7 +48,7 @@ std::string generate_output_filename(std::string input_fname)
 	unsigned ext_loc = input_fname.rfind('.');
 	if (ext_loc == std::string::npos)
 	{
-		throw "Input file type not recognized";
+		return input_fname + "_cropped";
 	}
 	std::string ext = input_fname.substr(ext_loc + 1);
 	std::string base = input_fname.substr(0, ext_loc);

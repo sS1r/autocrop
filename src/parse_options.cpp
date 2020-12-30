@@ -105,8 +105,18 @@ programOptions parse_options(int argc, char *argv[])
 			po.crop.color_b = b;
 		}
 	}
-	if(vm.count("input-files")) po.input_files = vm["input-files"].as<std::vector<std::string>>();
-
+	
+	// Check the input files
+	if(vm.count("input-files"))
+	{		
+		po.input_files = vm["input-files"].as<std::vector<std::string>>();
+		po.read_stdin = false;
+	}
+	else
+	{
+		po.read_stdin = true;
+	}
+	
 	// Generate the help message
 	std::stringstream ss;
 	ss << PROGRAM_HELP_DESC << visible;

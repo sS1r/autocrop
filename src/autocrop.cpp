@@ -129,14 +129,16 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 /*
 	Reads the input file into a GIL image
 	The file type is deduced from the file extension
+	
+	Returns: true if image could be read, otherwise false
 */
-void _read_image(std::string input_fname, gil::rgb8_image_t& img)
+bool _read_image(std::string input_fname, gil::rgb8_image_t& img)
 {
 	// Find the file extension
 	unsigned ext_loc = input_fname.rfind('.');
 	if (ext_loc == std::string::npos)
 	{
-		throw "Input file type not recognized";
+		return false;
 	}
 	std::string ext = input_fname.substr(ext_loc + 1);
 	
@@ -159,8 +161,9 @@ void _read_image(std::string input_fname, gil::rgb8_image_t& img)
 	}
 	else
 	{
-		throw "Input file type not supported";
-	}	
+		return false;
+	}
+	return true;
 }
 
 
@@ -171,7 +174,11 @@ void autocrop(const char* input_fname, const char* output_fname, const cropOptio
 {
 	// Read the input file into a 'view'
 	gil::rgb8_image_t img;
-	_read_image(input_fname, img);
+	if(!_read_image(input_fname, img))
+	{
+		std::cerr << "Could not read " << "'" << input_fname << "'" << std::endl;
+		return;
+	}
 	gil::rgb8_view_t view = gil::view(img);
 
 	// Calculate the amount of crop on all directions

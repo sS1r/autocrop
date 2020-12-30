@@ -47,6 +47,7 @@ class programOptions
 	{
 		help = false;				
 		verbose = false;
+		read_stdin = false;
 		input_files = std::vector<std::string>();
 		output_file = "";
 		helpmsg = "";
@@ -67,6 +68,9 @@ class programOptions
 	
 	// Verbose printing
 	bool verbose;
+	
+	// Read input files from stdin
+	bool read_stdin;
 	
 	// Input and output filenames
 	std::vector<std::string> input_files;
