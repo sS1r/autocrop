@@ -11,7 +11,8 @@ namespace po = boost::program_options;
 
 const char* PROGRAM_HELP_DESC = 
 "autocrop -- automatic image cropper.\n\n"
-"Usage: autocrop [options] INPUT_FILES\n";	
+"Usage: autocrop [options] [INPUT_FILES]\n"
+"Reads file names from standard input if INPUT_FILES is empty.\n\n";	
 
 programOptions parse_options(int argc, char *argv[])
 {

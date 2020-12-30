@@ -197,13 +197,13 @@ void autocrop(const char* input_fname, const char* output_fname, const cropOptio
 	unsigned crop_left = _crop(view, left, options);
 	if(gVerboseOutput)
 	{
-		std::cout << "Removing " << crop_left << " rows from left." << std::endl;
+		std::cout << "Removing " << crop_left << " columns from left." << std::endl;
 	}
 	
 	unsigned crop_right = _crop(view, right, options);
 	if(gVerboseOutput)
 	{
-		std::cout << "Removing " << crop_right << " rows from right." << std::endl;
+		std::cout << "Removing " << crop_right << " columns from right." << std::endl;
 	}
 	
 	// Crop the original image

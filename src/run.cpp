@@ -23,6 +23,10 @@ int run(const programOptions& opts)
 		std::string fname;
 		while(std::getline(std::cin, fname))
 		{
+			if(opts.verbose)
+			{
+				std::cout << "Processing file " << fname << std::endl;
+			}
 			autocrop(fname.c_str(), generate_output_filename(fname).c_str(), opts.crop);
 		}
 	}

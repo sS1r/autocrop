@@ -13,11 +13,15 @@ int main(int argc, char *argv[])
 		
 		if(status >= 0)
 		{
-			std::cout << "Success!" << std::endl;
+			if(opts.verbose)
+			{
+				std::cout << "Exiting..." << std::endl;
+			}
+			return 0;
 		}
 		else
 		{
-			std::cout << "Fail!" << std::endl;
+			std::cout << "Something went wrong..." << std::endl;
 		}
     }
 
@@ -34,5 +38,5 @@ int main(int argc, char *argv[])
         std::cout << "Unknown error occured.\n";
     }
 
-    return 0;
+    return 1;
 }
