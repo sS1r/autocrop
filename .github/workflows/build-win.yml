@@ -2,9 +2,9 @@ name: Build for Windows
 
 on:
   push:
-    branches: [ master ]
+    branches: [ build-win-wf ]
   workflow_dispatch:
-    branches: [ master ]
+    branches: [ build-win-wf ]
 
 jobs:
   build:
