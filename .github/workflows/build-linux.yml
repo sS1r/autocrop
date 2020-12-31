@@ -1,0 +1,31 @@
+name: Build for Linux
+
+on:
+  push:
+    branches: [ linux-build-wf ]
+  workflow_dispatch:
+    branches: [ linux-build-wf ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Compiler version
+      run: g++ --version
+    - name: Install dependencies
+      run: sudo apt-get install libboost-all-dev libpng-dev libjpeg-dev libtiff-dev
+    - name: make
+      run: make
+    - name: Make output
+      run: | 
+        mkdir output
+        cp autocrop output
+        cp img/potato_before.png output
+    - name: Upload executable
+      uses: actions/upload-artifact@v2
+      with:
+       name: Main executable 
+       path: output
