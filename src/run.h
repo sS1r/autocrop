@@ -24,6 +24,11 @@ extern bool gVerboseOutput;
 int run(const programOptions& opts);
 
 /*
+	Processes a single file
+*/
+void process_image(std::string fname, const programOptions& opts);
+
+/*
 	Generates a output filename from the given input filename
 */
 std::string generate_output_filename(std::string input_fname);

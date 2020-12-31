@@ -132,7 +132,7 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 	
 	Returns: true if image could be read, otherwise false
 */
-bool _read_image(std::string input_fname, gil::rgb8_image_t& img)
+bool _read_image(std::string input_fname, gil::rgb8_image_t& img, IMG_TYPE& type)
 {
 	// Find the file extension
 	unsigned ext_loc = input_fname.rfind('.');
@@ -150,14 +150,17 @@ bool _read_image(std::string input_fname, gil::rgb8_image_t& img)
 	if(ext == "png")
 	{
 		gil::png_read_and_convert_image(input_fname.c_str(), img);
+		type = IMG_TYPE::IMG_PNG;
 	}
 	else if(ext == "jpg" || ext == "jpeg")
 	{	
 		gil::jpeg_read_and_convert_image(input_fname.c_str(), img);
+		type = IMG_TYPE::IMG_JPG;
 	}
 	else if(ext == "tif" || ext == "tiff")
 	{
 		gil::tiff_read_and_convert_image(input_fname.c_str(), img);
+		type = IMG_TYPE::IMG_TIF;
 	}
 	else
 	{
@@ -173,8 +176,9 @@ bool _read_image(std::string input_fname, gil::rgb8_image_t& img)
 void autocrop(const char* input_fname, const char* output_fname, const cropOptions& options)
 {
 	// Read the input file into a 'view'
+	IMG_TYPE type;
 	gil::rgb8_image_t img;
-	if(!_read_image(input_fname, img))
+	if(!_read_image(input_fname, img, type))
 	{
 		std::cerr << "Could not read " << "'" << input_fname << "'" << std::endl;
 		return;
@@ -223,5 +227,18 @@ void autocrop(const char* input_fname, const char* output_fname, const cropOptio
 	gil::copy_pixels(cropped_view, output_view);
 	
 	// Write output
-	gil::png_write_view(output_fname, gil::const_view(output_img));
+	switch(type)
+	{
+		case IMG_TYPE::IMG_PNG:
+			gil::png_write_view(output_fname, gil::const_view(output_img));
+			break;
+		case IMG_TYPE::IMG_JPG:
+			gil::jpeg_write_view(output_fname, gil::const_view(output_img));
+			break;
+		case IMG_TYPE::IMG_TIF:
+			gil::tiff_write_view(output_fname, gil::const_view(output_img));
+			break;
+		default:
+			std::cerr << "Could not write output" << std::endl;
+	}
 }

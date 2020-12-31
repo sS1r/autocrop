@@ -9,42 +9,41 @@ bool gVerboseOutput;
 
 int run(const programOptions& opts)
 {
-	
+	gVerboseOutput = opts.verbose;
 	if(opts.help)
 	{
 		std::cout << opts.helpmsg << std::endl;
 		return 0;
 	}
 	
-	gVerboseOutput = opts.verbose;
-	
 	if(opts.read_stdin)
 	{
 		std::string fname;
 		while(std::getline(std::cin, fname))
 		{
-			if(opts.verbose)
-			{
-				std::cout << "Processing file " << fname << std::endl;
-			}
-			autocrop(fname.c_str(), generate_output_filename(fname).c_str(), opts.crop);
+			process_image(fname, opts);
 		}
 	}
 	else
 	{
 		for(auto i = opts.input_files.begin();i != opts.input_files.end();i++)
 		{			
-			if(opts.verbose)
-			{
-				std::cout << "Processing file " << *i << std::endl;
-			}
-			autocrop((*i).c_str(), generate_output_filename(*i).c_str(), opts.crop);
+			process_image(*i, opts);
 		}
 	}
 	
 	return 1;
 }
 
+
+void process_image(std::string fname, const programOptions& opts)
+{
+	if(opts.verbose)
+	{
+		std::cout << "Processing file " << fname << std::endl;
+	}
+	autocrop(fname.c_str(), generate_output_filename(fname).c_str(), opts.crop);
+}
 	
 std::string generate_output_filename(std::string input_fname)
 {
