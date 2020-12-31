@@ -31,6 +31,7 @@ programOptions parse_options(int argc, char *argv[])
 	// Add all options here
 	visible_add("help,h", "Print this help and exit");
 	visible_add("verbose,v", "Print verbose output");
+	visible_add("auto-detect-bg", "Detects background color automatically (TBA)");
 	visible_add("border_x", po::value<unsigned>(), "Leave border in X direction");
 	visible_add("border_y", po::value<unsigned>(), "Leave border in Y direction");
 	visible_add("threshold,t", po::value<double>(), "Cropping threshold [0 ... 100].");

@@ -20,19 +20,6 @@ namespace gil = boost::gil;
 
 
 /*
-	Direction enumeration.
-	Defines the part of the image that will be cropped.
-*/
-enum direction
-{
-	up =    0,
-	down =  1,
-	left =  2,
-	right = 3
-};
-
-
-/*
 	Iterates a line of pixels (row or column) and checks if the color is
 	same in all of them
 */
@@ -85,7 +72,7 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 		case right: 
 			i = view.width() - 1; i_change = -1; break;
 		default: 
-			throw "_x_crop: invalid direction";
+			throw "_crop: invalid direction";
 	}
 
 	bool same_color = true;
@@ -125,6 +112,22 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 	}
 	return -1;
 }
+
+/*
+	Detects the background color of the image automatically
+	
+	Returns: Color-object
+*/
+Color _detect_bg_color(const gil::rgb8_view_t& view)
+{
+	Color c = {255, 255, 255, 255};
+	
+	/*
+		Algo here
+	*/
+	
+	return c;
+};
 
 /*
 	Reads the input file into a GIL image

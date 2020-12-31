@@ -14,6 +14,7 @@ class cropOptions
 		color_r = 255;
 		color_g = 255;
 		color_b = 255;
+		auto_detect = false;
 		threshold = 0;
 		border_x = 0;
 		border_y = 0;
@@ -29,6 +30,9 @@ class cropOptions
 	uint8_t color_r;
 	uint8_t color_g;
 	uint8_t color_b;
+	
+	// Automatically detect BG color
+	bool auto_detect;
 	
 	// Threshold value for cropping (0% -- 100%)
 	unsigned threshold;
