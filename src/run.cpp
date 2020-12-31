@@ -42,7 +42,12 @@ void process_image(std::string fname, const programOptions& opts)
 	{
 		std::cout << "Processing file " << fname << std::endl;
 	}
-	autocrop(fname.c_str(), generate_output_filename(fname).c_str(), opts.crop);
+	std::string output_fname = generate_output_filename(fname);
+	if(opts.overwrite)
+	{
+		output_fname = fname;
+	}
+	autocrop(fname.c_str(), output_fname.c_str(), opts.crop);
 }
 	
 std::string generate_output_filename(std::string input_fname)

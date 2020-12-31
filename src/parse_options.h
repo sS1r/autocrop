@@ -49,7 +49,8 @@ class programOptions
 	// Set the default options
 	programOptions(): crop()
 	{
-		help = false;				
+		help = false;
+		overwrite = false;
 		verbose = false;
 		read_stdin = false;
 		input_files = std::vector<std::string>();
@@ -69,6 +70,9 @@ class programOptions
 	// Prints help
 	bool help;
 	std::string helpmsg;
+	
+	// Overwrite the source file
+	bool overwrite;
 	
 	// Verbose printing
 	bool verbose;

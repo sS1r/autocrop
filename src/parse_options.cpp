@@ -31,6 +31,7 @@ programOptions parse_options(int argc, char *argv[])
 	// Add all options here
 	visible_add("help,h", "Print this help and exit");
 	visible_add("verbose,v", "Print verbose output");
+	visible_add("overwrite", "Overwrite the input file");
 	visible_add("auto-detect-bg", "Detects background color automatically (TBA)");
 	visible_add("border_x", po::value<unsigned>(), "Leave border in X direction");
 	visible_add("border_y", po::value<unsigned>(), "Leave border in Y direction");
@@ -48,6 +49,9 @@ programOptions parse_options(int argc, char *argv[])
 	// Get the option values
 	po.help = bool(vm.count("help"));
 	po.verbose = bool(vm.count("verbose"));
+	po.overwrite = bool(vm.count("overwrite"));
+	po.crop.auto_detect = bool(vm.count("auto-detect-bg"));
+	
 	if(vm.count("border_x"))
 	{
 		po.crop.border_x = vm["border_x"].as<unsigned>();
