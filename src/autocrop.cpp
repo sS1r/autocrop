@@ -10,6 +10,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <map>
 
 #include "autocrop.h"
 #include "run.h"
@@ -120,13 +121,39 @@ int _crop(const gil::rgb8_view_t& view, direction dir, const cropOptions& option
 */
 Color _detect_bg_color(const gil::rgb8_view_t& view)
 {
-	Color c = {255, 255, 255, 255};
+	std::map<Color, unsigned> colormap;
+	unsigned img_w = view.width();
+	unsigned img_h = view.height();
 	
+	gil::rgb8_view_t::xy_locator iter = view.xy_at(0, 0);
+	for(unsigned i = 0; i < img_w*img_h; i++)
+	{
+		uint8_t r = gil::get_color(iter[i], gil::red_t());
+		uint8_t g = gil::get_color(iter[i], gil::green_t());
+		uint8_t b = gil::get_color(iter[i], gil::blue_t());
+		Color c = {r, g, b};
+
+		if(colormap.find(c) == colormap.end())
+		{
+			colormap[c] = 1;
+		}
+		else
+		{
+			colormap[c] += 1;
+		}
+	}
+
 	/*
-		Algo here
+	for(auto i = colormap.begin(); i != colormap.end();i++)
+	{
+		std::cout << i->first << ": " << i->second << std::endl;
+	}
 	*/
 	
-	return c;
+	// Find max
+	auto comp = [](std::pair<Color, unsigned int> i1, std::pair<Color, unsigned int> i2) -> bool {return i1.second < i2.second;};
+	auto m    = std::max_element(colormap.begin(), colormap.end(), comp);
+	return m->first;
 };
 
 /*
@@ -176,7 +203,7 @@ bool _read_image(std::string input_fname, gil::rgb8_image_t& img, IMG_TYPE& type
 /*
 	Crops the given input file and saves the result in the output file
 */
-void autocrop(const char* input_fname, const char* output_fname, const cropOptions& options)
+void autocrop(const char* input_fname, const char* output_fname, cropOptions options)
 {
 	// Read the input file into a 'view'
 	IMG_TYPE type;
@@ -187,6 +214,19 @@ void autocrop(const char* input_fname, const char* output_fname, const cropOptio
 		return;
 	}
 	gil::rgb8_view_t view = gil::view(img);
+
+	// Detect background color if requested
+	if(options.auto_detect)
+	{
+		Color c = _detect_bg_color(view);
+		if(gVerboseOutput)
+		{
+			std::cout << "Auto-detected background color: " << c << std::endl;
+		}
+		options.color_r = c.r;
+		options.color_g = c.g;
+		options.color_b = c.b;
+	}
 
 	// Calculate the amount of crop on all directions
 	unsigned crop_top = _crop(view, up, options);
