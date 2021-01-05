@@ -14,6 +14,7 @@ The background color on this image is (0, 162, 232), so running the following co
 ./autocrop -c 0,162,232 [image_file_name]
 ```
 Will procude this:
+
 ![After](/img/potato_after.png)
 
 ## Example usage 2:
